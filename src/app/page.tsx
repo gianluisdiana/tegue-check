@@ -37,27 +37,26 @@ export default function Home() {
   return selectedBuoy === undefined ? (
     <div className="bg-[#F6F3EA] min-h-screen flex flex-col items-center p-6 sm:p-10 rounded-lg shadow-lg">
       <h1 className="text-2xl font-semibold text-gray-900">Calidad del agua</h1>
-      <div className="relative w-full max-w-sm sm:max-w-md mt-4">
+      <div className="relative w-full max-w-sm sm:max-w-md">
         <Image
-          className="rounded-lg shadow-md"
+          className="rounded-lg shadow-md bg-white"
           src="/tenerife.svg"
           alt="Island map"
-          width={400}
-          height={300}
+          width={500}
+          height={400}
         />
-        <ol className="flex flex-col gap-2">
-          {buoys.map(buoy => {
-            return (
-              <div key={buoy.id} className="flex items-center gap-2 text-gray-900">
+        <div className="bg-white rounded-xl shadow-lg mt-6 p-4 w-full max-w-sm flex flex-col items-start">
+          <ol>
+            {buoys.map(buoy => (
+              <div key={buoy.id} className="flex items-center gap-2 text-gray-900 mt-2">
                 <div className={colorMap.get(buoy.id)}></div>
                 <button onClick={() => fetchBuoyData(buoy.id)}>
                   <p className="text-sm font-bold hover:cursor-pointer">{buoy.name}</p>
                 </button>
               </div>
-            )
-          }
-          )}
-        </ol>
+            ))}
+          </ol>
+        </div>
       </div>
 
       <div className="bg-white rounded-xl shadow-lg mt-6 p-4 w-full max-w-sm flex flex-col items-center">
@@ -85,16 +84,37 @@ export default function Home() {
           </div>
         </div>
       </div>
-
       <div className="bg-white rounded-xl shadow-lg mt-6 p-4 w-full max-w-sm text-gray-900">
-        <h1 className="text-lg font-bold text-gray-700">Advanced Data</h1>
-        <p className="mt-2"><strong>pH:</strong> {selectedBuoy.metrics.ph}</p>
-        <p><strong>Temperatura:</strong> {selectedBuoy.metrics.temperature}°C</p>
-        <p><strong>Conductividad:</strong> {selectedBuoy.metrics.conductivity} µS/cm</p>
-        <p><strong>Salinidad:</strong> {selectedBuoy.metrics.salinity} g/l</p>
+        <h1 className="text-lg font-bold text-gray-700">Datos avancados</h1>
+        <table className="w-full mt-4 text-sm text-left text-gray-500">
+          <thead className="hidden">
+            <tr>
+              <th className="px-4 py-2 text-left">Parámetro</th>
+              <th className="px-4 py-2 text-left">Valor</th>
+            </tr>
+          </thead>
+          <tbody className="text-sm text-gray-600">
+            <tr className="border-b border-gray-200">
+              <td className="px-4 py-2 font-semibold">pH</td>
+              <td className="px-4 py-2">{selectedBuoy.metrics.ph}</td>
+            </tr>
+            <tr className="border-b border-gray-200">
+              <td className="px-4 py-2 font-semibold">Temperatura</td>
+              <td className="px-4 py-2">{selectedBuoy.metrics.temperature} °C</td>
+            </tr>
+            <tr className="border-b border-gray-200">
+              <td className="px-4 py-2 font-semibold">Conductividad</td>
+              <td className="px-4 py-2">{selectedBuoy.metrics.conductivity} µS/cm</td>
+            </tr>
+            <tr className="border-b border-gray-200">
+              <td className="px-4 py-2 font-semibold">Salinidad</td>
+              <td className="px-4 py-2">{selectedBuoy.metrics.salinity} g/l</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <button className="cursor-pointer mt-6 rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
+      <button className="cursor-pointer mt-6 rounded-full border border-solid border-gray-800 transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
         onClick={() => setSelectedBuoy(undefined)}
       >
         Volver al mapa
