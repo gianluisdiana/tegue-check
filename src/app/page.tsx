@@ -62,7 +62,7 @@ export default function Home() {
         />
         <ol className="flex flex-col gap-2">
           {buoys.map(buoy =>
-            <div className="text-gray-900">
+            <div key={buoy.id} className="text-gray-900">
               <div className="w-4 h-4 bg-teal-600 rounded-full shadow-md"></div>
               <button onClick={() => fetchBuoyData(buoy.id)}>
                 <p className="text-sm font-bold hover:cursor-pointer">{buoy.name}</p>
