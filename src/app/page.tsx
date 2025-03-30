@@ -18,7 +18,7 @@ interface Metrics {
 }
 
 interface Buoy {
-  id: number,
+  id: string,
   coords: Coordenate,
   name: string
   metrics?: Metrics
@@ -27,6 +27,11 @@ interface Buoy {
 export default function Home() {
   const [buoys, setBuoys] = useState<Buoy[]>([]);
   const [selectedBuoy, setSelectedBuoy] = useState<Required<Buoy> | undefined>(undefined);
+  const colorMap: Map<string, string> = new Map();
+  colorMap.set("001", `w-4 h-4 bg-teal-600 rounded-full shadow-md`);
+  colorMap.set("002", `w-4 h-4 bg-green-600 rounded-full shadow-md`);
+  colorMap.set("003", `w-4 h-4 bg-blue-600 rounded-full shadow-md`);
+  colorMap.set("004", `w-4 h-4 bg-orange-600 rounded-full shadow-md`);
 
   useEffect(() => {
     fetch("https://tegueback.vercel.app/api/locations", {
@@ -37,7 +42,7 @@ export default function Home() {
       .catch((err) => console.error("Error obteniendo boyas:", err));
   }, []);
 
-  const fetchBuoyData = (id: number) => {
+  const fetchBuoyData = (id: string) => {
     fetch(`https://tegueback.vercel.app/api/buoy?id=${id}`, {
       method: "GET"
     })
@@ -61,14 +66,16 @@ export default function Home() {
           height={300}
         />
         <ol className="flex flex-col gap-2">
-          {buoys.map(buoy =>
-            <div key={buoy.id} className="text-gray-900">
-              <div className="w-4 h-4 bg-teal-600 rounded-full shadow-md"></div>
-              <button onClick={() => fetchBuoyData(buoy.id)}>
-                <p className="text-sm font-bold hover:cursor-pointer">{buoy.name}</p>
-                <p className="text-xs">{buoy.coords.lat}, {buoy.coords.long}</p>
-              </button>
-            </div>
+          {buoys.map(buoy => {
+            return (
+                <div key={buoy.id} className="flex items-center gap-2 text-gray-900">
+                  <div className={colorMap.get(buoy.id)}></div>
+                  <button onClick={() => fetchBuoyData(buoy.id)}>
+                    <p className="text-sm font-bold hover:cursor-pointer">{buoy.name}</p>
+                  </button>
+                </div>
+              )
+            }
           )}
         </ol>
       </div>
