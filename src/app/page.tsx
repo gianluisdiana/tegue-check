@@ -1,17 +1,7 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
-import "leaflet/dist/leaflet.css";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import L from "leaflet";
-
-const customIcon = new L.Icon({
-  iconUrl: "/pin.png",
-  iconSize: [25, 25],
-  iconAnchor: [12, 25],
-  popupAnchor: [0, -25]
-});
+import Image from "next/image";
 
 interface Coordenate {
   lat: number;
@@ -55,22 +45,28 @@ export default function Home() {
   return (
     <div className="bg-[#F6F3EA] min-h-screen flex flex-col items-center p-6 sm:p-10 rounded-lg shadow-lg">
       <h1 className="text-2xl font-semibold text-gray-900">Calidad del agua</h1>
-      <div className="relative w-full max-w-2xl h-96 mt-4">
-        <MapContainer center={[28.2916, -16.6291]} zoom={10} className="w-full h-full rounded-lg shadow-md">
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
+      <div className="relative w-full max-w-sm sm:max-w-md mt-4">
+        <Image
+          className="rounded-lg shadow-md"
+          src="/tenerife.svg"
+          alt="Island map"
+          width={400}
+          height={300}
+        />
+        <div className="absolute top-0 left-0 w-full h-full">
           {buoys.map(buoy => (
-            <Marker 
-              key={buoy.id} 
-              position={[buoy.coords.lat, buoy.coords.long]} 
-              icon={customIcon}
-              eventHandlers={{ click: () => fetchBuoyData(buoy.id) }}
-            >
-              <Popup>{buoy.name}</Popup>
-            </Marker>
+            <div
+              key={buoy.id}
+              className="absolute w-4 h-4 bg-teal-600 rounded-full shadow-md cursor-pointer"
+              style={{
+                top: `${buoy.coords.lat}%`,
+                left: `${buoy.coords.long}%`,
+                transform: "translate(-50%, -50%)",
+              }}
+              onClick={() => fetchBuoyData(buoy.id)}
+            ></div>
           ))}
-        </MapContainer>
+        </div>
       </div>
       {selectedBuoy && (
         <div className="bg-white rounded-xl shadow-lg mt-6 p-4 w-full max-w-sm">
